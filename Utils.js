@@ -1,22 +1,22 @@
 class Utils {
-    // generates a new Universally unique identify (UUID)
+    // generates a new Universally unique identify (id)
     // the UUID is used to identify each of the tasks
-    static uuid() {
+    static id() {
         /*jshint bitwise:false */
         var i, random;
-        var uuid = '';
+        var id = '';
 
         for (i = 0; i < 32; i++) {
             random = (Math.random() * 16) | 0;
             if (i === 8 || i === 12 || i === 16 || i === 20) {
-                uuid += '-';
+                id += '-';
             }
-            uuid += (i === 12 ? 4 : i === 16 ? (random & 3) | 8 : random).toString(
+            id += (i === 12 ? 4 : i === 16 ? (random & 3) | 8 : random).toString(
                 16
             );
         }
 
-        return uuid;
+        return id;
     }
 
     // adds 's' to the end of a given world when count > 1
