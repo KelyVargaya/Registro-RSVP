@@ -1,86 +1,85 @@
+class Model {
+  constructor() {
+    this.invitees = [];
+    this.inputName = null;
+    this.callback = null;
+  }  
 
-class Model{
-  constructor(){
-      this.invitees = [];
-      this.input = null;
-      this.callback = null;
-      this.check = null;
+ suscribe(render) {
+    this.callback = render;
   }
 
-suscribe(render){
-  this.callback = render;
-}
-notify(){
-  this.callback();
-}
+  notify() {
+    this.callback();
+  }
 
-addInvite(text){
-this.invitees.push({
-    name:text,
-    confirmed: false,
-    
-});
-this.notify();
-}
+  AddInvitees(text) {
+    this.invitees.push({
+      name: text,
+      id: Utils.id(),
+      confirmed: false});
+    this.notify();
+    this.inputName.value = "";
+  }
 
-isChecked(invite, input) {
-    invite.confirmed = input.checked;
+  DeleteInvitee(text) {
+    this.invitees = this.invitees.filter(item => item != text);
     this.notify();
   }
 
-removeInvite(text){
-  this.invitees;
-  this.notify();
+  AssistedInvitees(invite, inputName) {
+    invite.confirmed = inputName.checked;
+    this.notify();
   }
-
 }
 
-
- const Header = ({model}) => {
+const Header = ({ model }) => {
   return (
     <div className="wrapper">
       <header>
         <h1>RSVP</h1>
-        <p> Registration App </p>
-        <form id="registrar" onSubmit = {e => {
+        <p> Registration APP </p>
+        <form id="registrar"
+          onSubmit={e => {
             e.preventDefault();
-            model.addInvite(model.input.value);
-              }
-            }>
-            <input
-              type="text"
-              name="name"
-              placeholder="Invite Someone" />
-            <button
-              type="submit"
-              name="submit"
-              value="submit">
-              Submit
-            </button>
-
+            model.AddInvitees(model.inputName.value);
+          }}
+        >
+          <input 
+            type = "text" 
+            name = "name" 
+            placeholder = "Invite Someone" 
+            onChange = {e => (model.inputName = e.target)} />
+          <button 
+            type="submit" 
+            name="submit"
+            value="submit">
+            Submit</button>
         </form>
       </header>
+
       <div className="main">
         <h2>Invitees</h2>
         <ul id="invitedList">
-          {model.invitees.map(item => <createLista key = {item.id} invite={item} model={model} />)}
+          {model.invitees.map(item => <CreateLista key = {item.id} invite={item} model={model} />)}
         </ul>
       </div>
     </div>
   );
 }
 
-const createLista = ({model, invite}) => {
-  return (
-      <li>
-        {invite.name}
-        <label> Confirmed <input type="checkbox"  /> </label>
-        <button onclick= {() => model.removeInvite(invite)}> Remove </button> 
-      </li>
 
-  );     
+const CreateLista = ({ invite, model }) => {
+  return (
+    <li>
+      {invite.name}
+      <label> Confirmed <input type="checkbox" onChange = {(e) => model.AssistedInvitees(invite, e.target)} checked={invite.confirmed} /></label>
+      <button onClick={() => model.DeleteInvitee(invite)}>remove</button>
+    </li>
+  );
 }
-  
+
+
 let model = new Model();
 
 let render = () => {
@@ -92,4 +91,3 @@ let render = () => {
 
 model.suscribe(render);
 render(); 
- 
